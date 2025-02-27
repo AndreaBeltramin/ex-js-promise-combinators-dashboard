@@ -8,33 +8,32 @@
 // (result.name nella nuova proprietà airport).
 
 async function getDashboardData(query) {
-	const destinationPromise = fetch(
-		`https://boolean-spec-frontend.vercel.app/freetestapi/destinations?search=${query}`
-	).then((res) => res.json());
+	try {
+		const destinationPromise = fetch(
+			`https://boolean-spec-frontend.vercel.app/freetestapi/destinations?search=${query}`
+		).then((res) => res.json());
 
-	const weatherPromise = fetch(
-		`https://boolean-spec-frontend.vercel.app/freetestapi/weathers?search=${query}`
-	).then((res) => res.json());
+		const weatherPromise = fetch(
+			`https://boolean-spec-frontend.vercel.app/freetestapi/weathers?search=${query}`
+		).then((res) => res.json());
 
-	const airportNamePromise = fetch(
-		`https://boolean-spec-frontend.vercel.app/freetestapi/airports?search=${query}`
-	).then((res) => res.json());
+		const airportNamePromise = fetch(
+			`https://boolean-spec-frontend.vercel.app/freetestapi/airports?search=${query}`
+		).then((res) => res.json());
 
-	const promises = [destinationPromise, weatherPromise, airportNamePromise];
-	const [destination, weather, airport] = await Promise.all(promises);
-	return {
-		city: destination[0].name,
-		country: destination[0].country,
-		temperature: weather[0].temperature,
-		weather: weather[0].weather_destination,
-		airport: airport[0].name,
-	};
+		const promises = [destinationPromise, weatherPromise, airportNamePromise];
+		const [destination, weather, airport] = await Promise.all(promises);
+		return {
+			city: destination[0].name,
+			country: destination[0].country,
+			temperature: weather[0].temperature,
+			weather: weather[0].weather_destination,
+			airport: airport[0].name,
+		};
+	} catch (error) {
+		throw new Error(`Errore! Recupero dati non riuscito: ${error.message}`);
+	}
 }
-
-// (async () => {
-// 	const result = await Promise.all(results);
-// 	console.log(result);
-// })();
 
 getDashboardData("london")
 	.then((data) => {
