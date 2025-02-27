@@ -22,7 +22,13 @@ async function getDashboardData(query) {
 
 	const promises = [destinationPromise, weatherPromise, airportNamePromise];
 	const [destination, weather, airport] = await Promise.all(promises);
-	return {};
+	return {
+		city: destination[0].name,
+		country: destination[0].country,
+		temperature: weather[0].temperature,
+		weather: weather[0].weather_destination,
+		airport: airport[0].name,
+	};
 }
 
 // (async () => {
@@ -30,17 +36,16 @@ async function getDashboardData(query) {
 // 	console.log(result);
 // })();
 
-getDashboardData("london");
-
-// .then((data) => {
-// 	console.log("Dasboard data:", data);
-// 	console.log(
-// 		`${data.city} is in ${data.country}.\n` +
-// 			`Today there are ${data.temperature} degrees and the weather is ${data.weather}.\n` +
-// 			`The main airport is ${data.airport}.\n`
-// 	);
-// })
-// .catch((error) => console.error(error));
+getDashboardData("london")
+	.then((data) => {
+		console.log("Dasboard data:", data);
+		console.log(
+			`${data.city} is in ${data.country}.\n` +
+				`Today there are ${data.temperature} degrees and the weather is ${data.weather}.\n` +
+				`The main airport is ${data.airport}.\n`
+		);
+	})
+	.catch((error) => console.error(error));
 
 // Utilizzerai Promise.all() per eseguire queste richieste in parallelo
 // e poi restituirai un oggetto con i dati aggregati.
