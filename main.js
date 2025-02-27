@@ -7,20 +7,41 @@
 // 3. Il nome dell’aeroporto principale da /airports?search={query}
 // (result.name nella nuova proprietà airport).
 
-const destinationPromise = fetch(
-	`https://boolean-spec-frontend.vercel.app/freetestapi/destinations?search=[query]`
-).then((res) => res.json);
+const getDashboardData = async (query) => {
+	let promises;
+	const destinationPromise = fetch(
+		`https://boolean-spec-frontend.vercel.app/freetestapi/destinations?search=[query]`
+	).then((res) => res.json);
 
-// getDashboardData("london")
-// 	.then((data) => {
-// 		console.log("Dasboard data:", data);
-// 		console.log(
-// 			`${data.city} is in ${data.country}.\n` +
-// 				`Today there are ${data.temperature} degrees and the weather is ${data.weather}.\n` +
-// 				`The main airport is ${data.airport}.\n`
-// 		);
-// 	})
-// 	.catch((error) => console.error(error));
+	const weatherPromise = fetch(
+		`https://boolean-spec-frontend.vercel.app/freetestapi/weathers?search=[query]`
+	).then((res) => res.json);
+
+	const airportNamePromise = fetch(
+		`https://boolean-spec-frontend.vercel.app/freetestapi/airports?search=[query]`
+	).then((res) => res.json);
+
+	promises = [destinationPromise, weatherPromise, airportNamePromise];
+	const results = await Promise.all(promises);
+
+	return results;
+};
+
+// (async () => {
+// 	const result = await Promise.all(results);
+// 	console.log(result);
+// })();
+
+getDashboardData("london")
+	.then((data) => {
+		console.log("Dasboard data:", data);
+		console.log(
+			`${data.city} is in ${data.country}.\n` +
+				`Today there are ${data.temperature} degrees and the weather is ${data.weather}.\n` +
+				`The main airport is ${data.airport}.\n`
+		);
+	})
+	.catch((error) => console.error(error));
 
 // Utilizzerai Promise.all() per eseguire queste richieste in parallelo
 // e poi restituirai un oggetto con i dati aggregati.
