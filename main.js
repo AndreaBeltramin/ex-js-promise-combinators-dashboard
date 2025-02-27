@@ -23,7 +23,6 @@ const getDashboardData = async (query) => {
 
 	promises = [destinationPromise, weatherPromise, airportNamePromise];
 	const results = await Promise.all(promises);
-
 	return results;
 };
 
